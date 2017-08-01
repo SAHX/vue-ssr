@@ -26,6 +26,8 @@ server.use('/service-worker.js', serve('./dist/service-worker.js'))
 server.get('*', (req, res) => {
     const context = { url: req.url }
     console.log(req.url)
+
+    /* 以下为正常渲染 */
     renderer.renderToString(context, (err, html) => {
         if (err) {
             if (err.code === 404) {
@@ -37,6 +39,22 @@ server.get('*', (req, res) => {
             res.end(html)
         }
     })
+    /* 渲染结束 */
+
+    /* 以下为流式渲染 */
+    // const stream = renderer.renderToStream(context);
+    // let html = ''
+    // stream.on('data', data => {
+    //     html += data.toString()
+    // })
+    // stream.on('end', () => {
+    //     // 渲染完成
+    //     res.end(html)
+    // })
+    // stream.on('error', err => {
+    //     console.log(err)
+    // })
+    /* 流式渲染结束 */
 })
 
 const port = 8080
